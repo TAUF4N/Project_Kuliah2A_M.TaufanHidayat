@@ -1,0 +1,21 @@
+# Rumah  buku adalahvjkh
+
+## Level User 1	: Admin / Owner
+    -Mengelola data buku ( menambah, menghapus, melihat, dan mengubah data buku).
+    -Mengelola data karyawan
+    -Melihat aktivitas supplier
+
+## Level User 2	: Supplier
+    -Menyediakan informasi tentang ketersediaan data buku
+    -Menerima pesanan dari toko buku dan mengirim sesuai permintaan
+    -Mengelola proses pengiriman buku ke toko buku dan menjaga hubungan pasokan yang efisien antara supplier dan toko buku
+
+## level User 3	: Karyawan
+    -Mengelola data pelanggan
+    -Melihat harga dan informasi buku
+    -Mengelola proses penerimaan buku yang baru sampai di toko buku
+    -Pencetakan nota pembelian
+
+## Level User 4	: Gudang
+    -Mendata dan mengecek buku yang masuk ke gudang
+    -Memperingati karyawan bahwa stok buku mulai habis
