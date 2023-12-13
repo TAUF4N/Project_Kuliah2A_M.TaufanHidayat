@@ -1,13 +1,15 @@
 <?php
-session_start();
-if(!empty($_SESSION['username_rumahbuku'])){
-    header ('location:home');
+// session_start();
+if (!empty($_SESSION['username_rumahbuku'])) {
+    header('location:home');
 }
 ?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
+    <script src="../assets/js/color-modes.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -101,15 +103,15 @@ if(!empty($_SESSION['username_rumahbuku'])){
 
 
     <!-- Custom styles for this template -->
-    <link href="assets/css/login.css" rel="stylesheet">
+    <link href="sign-in.css" rel="stylesheet">
 </head>
 
 <body class="d-flex align-items-center py-4 bg-body-tertiary">
 
     <main class="form-signin w-100 m-auto text-center">
         <form class="needs-validation" novalidate action="proses/proses_login.php" method="post">
-        <i class="bi bi-tropical-storm fs-1"></i>
-            <h1 class="h3 mb-3 fw-normal">Please Login</h1>
+        <img src="assets/img/logo transparant.png" alt="Latansa Logo" class="mb-3" style="max-width: 250px; height: auto;"> <!-- Ubah ukuran gambar di sini -->
+             
 
             <div class="form-floating">
                 <input name="username" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
