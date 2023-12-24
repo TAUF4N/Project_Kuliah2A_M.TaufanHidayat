@@ -11,9 +11,7 @@ if (!empty($_SESSION['username_rumahbuku'])) {
     <script src="../assets/js/color-modes.js"></script>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <meta name="generator" content="Hugo 0.118.2">
     <title>Rumah Buku</title>
 
@@ -137,9 +135,6 @@ if (!empty($_SESSION['username_rumahbuku'])) {
             </div>
             <button class="btn btn-success w-100 py-2" type="submit" name="submit_validate" value="abc">Login</button>
             <p class="mt-5 mb-3 text-body-secondary">&copy; 1994 - <?php echo date("Y") ?></p>
-
-            <h1>admin@admin.com</h1>
-            <h1>password</h1>
         </form>
     </main>
     <script>

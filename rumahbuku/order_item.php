@@ -1,12 +1,17 @@
 <?php
 include "proses/connect.php";
-$query = mysqli_query($conn, "SELECT tb_pesanan. *,nama, SUM(harga*jumlah) AS harganya FROM tb_pesanan LEFT JOIN tb_user ON tb_user.id = tb_pesanan.karyawan
-LEFT JOIN tb_list_order ON  tb_list_order.pesanan = tb_pesanan.id_pesanan
+
+$query = mysqli_query($conn, "SELECT *, SUM(harga*jumlah) AS harganya  FROM tb_list_order 
+LEFT JOIN tb_pesanan ON tb_pesanan.id_pesanan =  tb_list_order.pesanan
 LEFT JOIN tb_daftar_buku ON tb_daftar_buku.id = tb_list_order.buku
 -- LEFT JOIN tb_bayar ON tb_bayar.id_bayar = tb_pesanan.id_pesanan
-GROUP BY id_pesanan ");
+GROUP BY id_list_order 
+HAVING tb_list_order.pesanan = $_GET[pesanan]");
 while ($record = mysqli_fetch_array($query)) {
     $result[] = $record;
+    $kode = $record['kode_pesanan'];
+    $alamat = $record['alamat'];
+    $pelanggan = $record['pelanggan'];
 }
 
 // $select_kat_buku = mysqli_query($conn, "SELECT id_kat_buku,kategori_buku FROM tb_kategori_buku");
@@ -19,12 +24,27 @@ while ($record = mysqli_fetch_array($query)) {
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col d-flex justify-content-end">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalTambahBuku">Buat
-                        Pesanan</button>
+                <div class="col-lg-4">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="kodepesanan" value="<?php echo $kode; ?>">
+                        <label>Kode Pesanan</label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="alamat" value="<?php echo $alamat; ?>">
+                        <label>Alamat</label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="pelanggan"
+                            value="<?php echo $pelanggan; ?>">
+                        <label>Pelanggan</label>
+                    </div>
                 </div>
             </div>
-            <!-- Modal Buat Pesanan Baru-->
+            <!-- Modal tambah buku baru-->
             <div class="modal fade" id="ModalTambahBuku" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-fullscreen-md-down">
@@ -38,42 +58,74 @@ while ($record = mysqli_fetch_array($query)) {
                                 method="POST" enctype="multipart/form-data">
                                 <input type="hidden" value="<?php echo $row['id'] ?>" name="id">
                                 <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="uploadFoto" name="kode_order"
-                                                value="<?php echo date('ymdHi') . rand(100, 999) ?>" readonly>
-                                            <label for="uploadFoto">Kode Order</label>
+                                    <div class="col-lg-6">
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control py-3" id="upload-foto"
+                                                placeholder="Foto" name="foto" required>
+                                            <label class="input-group-text" for="upload-foto">Upload Foto Buku</label>
                                             <div class="invalid-feedback">
-                                                Please choose a code order.
+                                                Masukkan File Foto.
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="input" class="form-control" id="floatingInput"
+                                                placeholder="nama buku" name="nama_buku" required>
+                                            <label for="floatingInput">Nama Buku</label>
+                                            <div class="invalid-feedback">
+                                                Masukkan Nama Buku.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="floatingInput"
-                                                placeholder="alamat" name="alamat" required>
-                                            <label for="floatingInput">alamat</label>
+                                                placeholder="keterangan" name="keterangan">
+                                            <label for="floatingPassword">Keterangan</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="kat_buku" required>
+                                                <option selected hidden value="">Pilih Kategori Buku</option>
+                                                <?php
+                                                foreach ($select_kat_buku as $value) {
+                                                    echo "<option value=" . $value['id_kat_buku'] . ">$value[kategori_buku]</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <label for="floatingInput">Kategori Buku</label>
                                             <div class="invalid-feedback">
-                                                Masukkan alamat.
+                                                Pilih Kategori Buku.
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="pelanggan"
-                                            placeholder="Nama Pelanggan" name="pelanggan" required>
-                                        <label for="pelanggan">Nama Pelanggan</label>
-                                        <div class="invalid-feedback">
-                                            Masukkan Nama Pelanggan.
+                                        <div class="form-floating mb-3">
+                                            <input type="number" class="form-control" id="floatingInput"
+                                                placeholder="harga" name="harga" required>
+                                            <label for="floatingInput">Harga</label>
+                                            <div class="invalid-feedback">
+                                                Masukkan Harga.
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="pelanggan"
-                                            placeholder="Nama Pelanggan" name="pelanggan" required>
-                                        <label for="catatan">Catatan</label>
+                                    <div class="col-lg-4">
+                                        <div class="form-floating mb-3">
+                                            <input type="number" class="form-control" id="floatingInput"
+                                                placeholder="Stok" name="stok" required>
+                                            <label for="floatingInput">Stok</label>
+                                            <div class="invalid-feedback">
+                                                Masukkan Stok.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -332,46 +384,30 @@ while ($record = mysqli_fetch_array($query)) {
                     <table class="table table-hover">
                         <thead>
                             <tr class="text-nowrap">
-                                <th scope="col">No</th>
-                                <th scope="col">Kode Pesanan</th>
-                                <th scope="col">Pelanggan</th>
-                                <th scope="col">Alamat</th>
-                                <th scope="col">Total Harga</th>
-                                <th scope="col">Karyawan</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Waktu Pesanan</th>
+                                <th scope="col">Buku</th>
+                                <th scope="col">Harga</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $no = 1;
+                            $total = 0;
                             foreach ($result as $row) {
                                 ?>
                                 <tr>
-                                    <th scope="row">
-                                        <?php echo $no++ ?>
-                                    </th>
                                     <td>
-                                        <?php echo $row['kode_pesanan'] ?>
+                                        <?php echo $row['nama_buku'] ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['pelanggan'] ?>
+                                        <?php echo $row['harga'] ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['alamat'] ?>
+                                        <?php echo $row['jumlah'] ?>
                                     </td>
                                     <td>
                                         <?php echo number_format((int) $row['harganya'], 2, ',', '.') ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['nama'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['status'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['waktu_order'] ?>
                                     </td>
                                     <td>
                                         <div class="d-flex">
@@ -388,14 +424,31 @@ while ($record = mysqli_fetch_array($query)) {
                                     </td>
                                 </tr>
                                 <?php
+                                $total += $row['harganya'];
                             }
                             ?>
+                            <tr>
+                                <td colspan="3" class="fw-bold">
+                                    Total Harga
+                                </td>
+                                <td class="fw-bold">
+                                    <?php echo number_format($total, 2, ',', '.') ?>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <?php
             }
             ?>
+            <div>
+                <button
+                    class="<?php echo (!empty($row['id_bayar'])) ? "btn btn-secondary disabled" : "btn btn-success"; ?>"
+                    data-bs-toggle="modal" data-bs-target="#tambahItem"><i class="bi bi-plus-circle"></i> Item</button>
+                <button
+                    class="<?php echo (!empty($row['id_bayar'])) ? "btn btn-secondary disabled" : "btn btn-primary"; ?>"
+                    data-bs-toggle="modal" data-bs-target="#bayar"><i class="bi bi-cash-coin"></i> Bayar</button>
+            </div>
         </div>
     </div>
 </div>
